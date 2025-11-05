@@ -1,6 +1,10 @@
-﻿using CustomerManagement.Models;
+﻿using CustomerManagement.Core.Filters;
+using CustomerManagement.Core.Requests.Customer;
+using CustomerManagement.Core.Responses.Customer;
+using CustomerManagement.Models;
 using CustomerManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace CustomerManagement.API.Controllers;
 
@@ -26,10 +30,22 @@ public class CustomerController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(Customer customer)
+    public IActionResult Create(CreateCustomerRequest customer)
     {
         _customerService.Add(customer);
         return CreatedAtAction(nameof(Get), new { id = customer.Id }, customer);
+    }
+
+    [HttpPost("CreateWithValidation")]
+    [SwaggerOperation("CreateWithValidation")]
+    [ValidationFilter<CreateCustomerRequest>]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(CreateCustomerResponse), StatusCodes.Status400BadRequest)]
+    public IActionResult CreateWithValidation([FromBody] CreateCustomerRequest customer)
+    {
+        var response = _customerService.Add(customer);
+        //return CreatedAtAction(nameof(Get), new { id = customer.Id }, customer);
+        return Ok(response);
     }
 
     [HttpPut("{id}")]
