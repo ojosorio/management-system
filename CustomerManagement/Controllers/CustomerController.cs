@@ -1,6 +1,7 @@
 ﻿using CustomerManagement.Core.Filters;
 using CustomerManagement.Core.Requests.Customer;
 using CustomerManagement.Core.Responses.Customer;
+using CustomerManagement.Domain.Services.Utils;
 using CustomerManagement.Models;
 using CustomerManagement.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +68,15 @@ public class CustomerController : ControllerBase
 
         _customerService.Delete(id);
         return NoContent();
+    }
+
+    [HttpGet("Export")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Export([FromQuery] GetExportReportRequest request)
+    {
+        var fileContent = _customerService.GetExportReport(request);
+
+        return File(fileContent, Constants.SpreadsheetContentType, "Report.xlsx");
     }
 
 }

@@ -1,8 +1,8 @@
-﻿using CustomerManagement.Services;
-using CustomerManagement.Services.Interfaces;
+﻿using CustomerManagement.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
+using CustomerManagement.Domain.Services;
 
 namespace CustomerManagement.Domain;
 
